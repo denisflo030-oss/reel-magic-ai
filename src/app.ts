@@ -13,7 +13,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 // Initialize storage directories
-await initializeStorage();
+(async () => {
+  await initializeStorage();
+})();
 
 // Middleware
 app.use(cors());
