@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reel Magic AI - Video Processing Backend</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+          Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        padding: 40px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #666;
+        margin-bottom: 30px;
+      }
+
+      .features {
+        text-align: left;
+        margin: 30px 0;
+      }
+
+      .features li {
+        margin: 10px 0;
+        color: #555;
+      }
+
+      .api-info {
+        background: #f5f5f5;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 20px 0;
+        text-align: left;
+      }
+
+      .api-info code {
+        background: #e0e0e0;
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+
+      .status {
+        display: inline-block;
+        background: #4caf50;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎬 Reel Magic AI</h1>
+      <p class="subtitle">AI-Powered Video Processing Backend</p>
+
+      <div class="features">
+        <h3>Features:</h3>
+        <ul>
+          <li>Upload and process video files</li>
+          <li>Generate viral clips using AI analysis</li>
+          <li>Automatic subtitle generation with Whisper</li>
+          <li>Format conversion (including vertical 9:16 format)</li>
+          <li>OpenAI integration for smart content analysis</li>
+          <li>FFmpeg-powered video processing</li>
+        </ul>
+      </div>
+
+      <div class="api-info">
+        <h3>API Endpoints:</h3>
+        <p><strong>Videos:</strong></p>
+        <p><code>POST /api/videos/upload</code> - Upload a video</p>
+        <p><code>GET /api/videos/:videoId</code> - Get video info</p>
+        <p><code>DELETE /api/videos/:videoId</code> - Delete a video</p>
+
+        <p style="margin-top: 15px"><strong>Clips:</strong></p>
+        <p><code>POST /api/clips/generate</code> - Generate viral clips</p>
+        <p><code>GET /api/clips/status/:jobId</code> - Get job status</p>
+        <p><code>GET /api/clips/:clipId</code> - Download clip</p>
+        <p><code>GET /api/clips</code> - List clips</p>
+
+        <p style="margin-top: 15px"><strong>Health:</strong></p>
+        <p><code>GET /health</code> - Server health check</p>
+      </div>
+
+      <div class="status">✅ Server is Running</div>
+
+      <p style="margin-top: 30px; color: #999; font-size: 14px">
+        See documentation for detailed API usage and setup instructions
+      </p>
+    </div>
+  </body>
+</html>
