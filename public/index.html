@@ -61,12 +61,14 @@
                                       <div id="clips"></div>
 
                                       <script>
+                                      const API_BASE = "https://reel-magic-ai.onrender.com";
+
                                       async function upload() {
                                           const file = document.getElementById("file").files[0];
                                             const formData = new FormData();
                                               formData.append("video", file);
 
-                                                const res = await fetch("/api/videos/upload", {
+                                                const res = await fetch(`${API_BASE}/api/videos/upload`, {
                                                         method: "POST",
                                                             body: formData
                                                 });
@@ -78,7 +80,7 @@
                                       async function analyze() {
                                           const url = document.getElementById("url").value;
 
-                                            const res = await fetch("/api/videos/analyze", {
+                                            const res = await fetch(`${API_BASE}/api/videos/analyze`, {
                                                     method: "POST",
                                                         headers: { "Content-Type": "application/json" },
                                                             body: JSON.stringify({ url })
