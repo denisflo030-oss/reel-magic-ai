@@ -3,14 +3,13 @@ services:
     name: reel-magic-ai
     env: node
     plan: standard
-    buildCommand: npm install && npm run build
+    buildCommand: apt-get update && apt-get install -y ffmpeg && npm install && npm run build
     startCommand: npm start
     healthCheckPath: /health
-    envVarsFile: .env
     autoDeploy: true
 
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 3000
+        value: 10000
