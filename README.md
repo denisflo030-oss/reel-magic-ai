@@ -4,6 +4,22 @@ AI-powered video processing backend for generating viral clips. Automatically an
 
 **Production-ready SaaS AI backend** — like Ssemble, but fully customizable.
 
+## 🚀 Quick Deploy to Render (5 minutes)
+
+Deploy for **FREE** with one click:
+
+1. **Push to GitHub** (make sure code is there)
+2. **Go to [render.com](https://render.com)**
+3. **Click "New Web Service" → Connect GitHub repo**
+4. **Set environment variable:** `OPENAI_API_KEY=sk-...`
+5. **Deploy!** 🎉
+
+Your API will be live at: `https://reel-magic-ai.onrender.com`
+
+📖 **Full deployment guide:** See [RENDER-DEPLOY.md](./RENDER-DEPLOY.md)
+
+---
+
 ## ✨ Features
 
 - **📹 Video Upload & Processing** — Handle large video files with FFmpeg
@@ -231,6 +247,19 @@ curl http://localhost:3000/api/clips/status/job-xxx
 
 ## 🚢 Production Deployment
 
+### Deploy to Render (Recommended)
+
+**Easiest way to deploy** - 5 minutes, free tier available:
+
+1. **[RENDER-DEPLOY.md](./RENDER-DEPLOY.md)** - Step-by-step guide
+2. Build command: `apt-get update && apt-get install -y ffmpeg && npm install && npm run build`
+3. Start command: `npm start`
+4. Env var: `OPENAI_API_KEY=sk-...`
+
+See [RENDER-DEPLOY.md](./RENDER-DEPLOY.md) for complete instructions.
+
+### Deploy to Production
+
 ### Render (Recommended)
 
 1. **Push to GitHub** (if not already there)
@@ -239,7 +268,7 @@ curl http://localhost:3000/api/clips/status/job-xxx
    - Go to [render.com](https://render.com)
    - New → Web Service
    - Connect GitHub repository
-   - Build command: `npm run build`
+   - Build command: `apt-get update && apt-get install -y ffmpeg && npm install && npm run build`
    - Start command: `npm start`
 
 3. **Add Environment Variables:**
@@ -255,6 +284,9 @@ Render will automatically run `npm install` and your deployment will be live.
 Create `Dockerfile`:
 ```dockerfile
 FROM node:20-alpine
+
+# Install FFmpeg
+RUN apk add --no-cache ffmpeg
 
 WORKDIR /app
 

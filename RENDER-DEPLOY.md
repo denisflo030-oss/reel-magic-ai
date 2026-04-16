@@ -1,93 +1,133 @@
-# 🚀 Render Deployment Guide - Reel Magic AI
+# 🚀 Render Deployment Guide
 
-Complete step-by-step guide to deploy AI video processing SaaS to Render.
+Deploy Reel Magic AI to Render in **5 minutes**. Completely free tier available.
 
-## ✅ Prerequisites
+## Prerequisites
 
-- GitHub account with pushed code (already done ✓)
-- Render account (free tier available)
-- OpenAI API key
-- ~2 minutes to deploy
-
-## 📋 Step-by-Step Deployment
-
-### Step 1: Create Render Account
-
-1. Go to [render.com](https://render.com)
-2. Click "Sign Up"
-3. Use GitHub account to sign in
-4. Authorize Render to access your repositories
-
-### Step 2: Connect Repository
-
-1. On Render dashboard, click **New +** → **Web Service**
-2. Select **GitHub** as the repository source
-3. Click **Connect account** if needed
-4. Search for `reel-magic-ai`
-5. Click **Connect** next to the repository
-
-### Step 3: Configure Web Service
-
-**Name:**
-```
-reel-magic-ai
-```
-
-**Environment:**
-```
-Node
-```
-
-**Build Command:** (IMPORTANT - includes FFmpeg)
-```bash
-apt-get update && apt-get install -y ffmpeg && npm install && npm run build
-```
-
-**Start Command:**
-```bash
-npm start
-```
-
-**Instance Type:**
-```
-Standard (start with this, upgrade if needed)
-```
-
-### Step 4: Add Environment Variables
-
-Click **Environment** on the sidebar, then add these variables:
-
-| Key | Value | Notes |
-|-----|-------|-------|
-| `OPENAI_API_KEY` | `sk-proj-...` | Paste your OpenAI API key |
-| `NODE_ENV` | `production` | Important for performance |
-| `PORT` | `10000` | Render default |
-
-### Step 5: Deploy
-
-1. Scroll to bottom
-2. Click **Create Web Service**
-3. Wait for deployment (2-5 minutes)
-4. Once deployed, you'll see a URL like: `https://reel-magic-ai.onrender.com`
-
-### Step 6: Verify Deployment
-
-Once the deployment shows **Live**, test it:
-
-```bash
-curl https://reel-magic-ai.onrender.com/health
-```
-
-You should get:
-```json
-{"status":"ok","timestamp":"..."}
-```
+✅ GitHub account with the repo pushed
+✅ OpenAI API key (from platform.openai.com)
+✅ Render account (free at render.com)
 
 ---
 
-## 🎯 Your Live SaaS Backend
+## Step 1: Push to GitHub
 
-Once deployed, you have a production AI video processing API:
+Ensure your code is on GitHub:
+
+```bash
+cd /workspaces/reel-magic-ai
+
+# Initialize Git (if not already done)
+git config user.name "Your Name"
+git config user.email "your@email.com"
+
+# Create GitHub repo and push
+git add .
+git commit -m "Initial Reel Magic AI backend"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/reel-magic-ai.git
+git push -u origin main
+```
+
+✅ Your code is now on GitHub
+
+---
+
+## Step 2: Create Render Web Service
+
+### 2.1 Go to [render.com](https://render.com)
+
+- Sign up (free account)
+- Click **"New +"** → **"Web Service"**
+
+### 2.2 Connect GitHub Repository
+
+- Click **"Connect account"** (GitHub)
+- Select your **reel-magic-ai** repository
+- Click **"Connect"**
+
+### 2.3 Configure Web Service
+
+Fill in the following:
+
+**General Settings:**
+- **Name:** `reel-magic-ai`
+- **Environment:** `Node`
+- **Region:** Choose closest to you (or US East for default)
+- **Branch:** `main`
+- **Build Command:**
+  ```
+  apt-get update && apt-get install -y ffmpeg && npm install && npm run build
+  ```
+- **Start Command:**
+  ```
+  npm start
+  ```
+
+**Plan:**
+- Select **Free** tier (or Standard for production)
+
+### 2.4 Add Environment Variables
+
+Click **"Advanced"** → **"Add Environment Variable"**
+
+Add these 3 variables:
+
+| Key | Value | Notes |
+|-----|-------|-------|
+| `OPENAI_API_KEY` | `sk-proj-...` | Your actual API key |
+| `NODE_ENV` | `production` | Required |
+| `PORT` | `3000` | Already set in Render |
+
+⚠️ **IMPORTANT:** 
+- Copy your actual OpenAI API key from [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+- Paste it in the `OPENAI_API_KEY` field
+- This value is **encrypted** on Render (not visible in logs)
+- Never commit API keys to GitHub
+
+### 2.5 Deploy
+
+- Click **"Create Web Service"**
+- Render starts building (~2-3 minutes)
+- Watch the **Logs** tab for progress
+
+```
+Building...
+Installing dependencies...
+Compiling TypeScript...
+Installing FFmpeg...
+Build complete! ✅
+Server running on port 3000
+```
+
+✅ Deployment complete!
+
+---
+
+## Step 3: Test Your Deployment
+
+Once the build completes, you'll get a **public URL**:
+```
+https://reel-magic-ai.onrender.com
+```
+
+### Test Health Check
+```bash
+curl https://reel-magic-ai.onrender.com/health
+# Response: {"status":"ok","timestamp":"..."}
+```
+
+### Test Server Info
+```bash
+curl https://reel-magic-ai.onrender.com/api/info
+# Shows server statistics
+```
+
+✅ Your backend is now live!
+
+---
+
+## Step 4: Use the Live API
 
 ### Upload a Video
 ```bash
@@ -95,11 +135,11 @@ curl -X POST -F "video=@video.mp4" \
   https://reel-magic-ai.onrender.com/api/videos/upload
 ```
 
-### Generate Viral Clips
+### Generate AI Clips
 ```bash
 curl -X POST https://reel-magic-ai.onrender.com/api/clips/generate \
   -H "Content-Type: application/json" \
-  -d '{"videoId": "vid-xxx"}'
+  -d '{"videoId": "vid-xxx", "numClips": 3}'
 ```
 
 ### Check Progress
@@ -107,231 +147,219 @@ curl -X POST https://reel-magic-ai.onrender.com/api/clips/generate \
 curl https://reel-magic-ai.onrender.com/api/clips/status/job-xxx
 ```
 
-### Download Clips
-```bash
-curl https://reel-magic-ai.onrender.com/api/clips/download/clip-xxx \
-  -o my-viral-clip.mp4
-```
+✅ Everything works the same as local!
 
 ---
 
-## 🔧 Render Configuration Details
+## Common Render Issues & Solutions
 
-### Build Command Breakdown
+### ❌ `ffmpeg: command not found`
 
+**Problem:** FFmpeg not installed on Render container
+
+**Solution:** Already fixed in `render.yaml`!
 ```bash
 apt-get update && apt-get install -y ffmpeg && npm install && npm run build
 ```
 
-1. `apt-get update` - Update package manager
-2. `apt-get install -y ffmpeg` - Install FFmpeg (required for video processing)
-3. `npm install` - Install Node dependencies
-4. `npm run build` - Compile TypeScript to JavaScript
+If you still get the error, manually add to build command in Render dashboard.
 
-This ensures FFmpeg is available in the production container.
+### ❌ `Build failed: ENOSPC: no space left on device`
 
-### Start Command
+**Problem:** Out of storage during build
 
-```bash
-npm start
+**Solution:** 
+1. Go to **Settings** → **Clear build cache**
+2. Trigger rebuild
+3. If persists, upgrade to Standard plan
+
+### ❌ `OpenAI API error: Unauthorized`
+
+**Problem:** API key is wrong or missing
+
+**Solution:**
+1. Go to **Settings** → **Environment**
+2. Verify `OPENAI_API_KEY` is set correctly
+3. Copy fresh key from platform.openai.com
+4. Restart service (top right menu)
+
+### ❌ `Timeout waiting for HTTP response`
+
+**Problem:** Server taking too long to start
+
+**Solution:**
+1. Check **Logs** for errors
+2. Ensure all dependencies are in `package.json`
+3. May need to upgrade plan if Free tier is overloaded
+
+### ❌ Video upload returns error
+
+**Problem:** Upload directory issue on Render
+
+**Solution:** Render uses `/tmp` for temporary storage
 ```
-
-Runs the compiled server from `dist/index.js`
-
-### Health Check
-
-Render pings `/health` endpoint to verify the server is running.
+UPLOAD_DIR=/tmp/reel-magic-uploads
+```
+(Already configured in render.yaml)
 
 ---
 
-## 📊 Monitoring & Logs
+## Monitoring Your Deployment
 
 ### View Logs
-
-1. Go to your service on Render
-2. Click **Logs** tab
-3. See real-time server logs
-
-### Common Issues
-
-**FFmpeg not found:**
-- Already fixed in build command ✓
-- Render installs FFmpeg during build
-
-**OpenAI API errors:**
-- Check API key is correct
-- Verify key starts with `sk-proj-`
-- Ensure your OpenAI account has credits
-
-**Video processing slow:**
-- Normal for large videos (10-30 min video takes 5-10 minutes)
-- Standard tier may be slower
-- Upgrade to Professional tier for better performance
-
----
-
-## 💰 Render Pricing
-
-| Plan | Price | Good For |
-|------|-------|----------|
-| **Free** | $0 | Testing (auto-spins down) |
-| **Standard** | $7/month | Production (recommended) |
-| **Professional** | $12+/month | High traffic |
-
-**Recommended:** Start with Standard ($7/month)
-
----
-
-## 🔄 Continuous Deployment
-
-Once deployed, Render automatically deploys when you push to GitHub:
-
-1. Update code locally
-2. Commit changes
-3. Push to GitHub
-4. Render automatically rebuilds and deploys
-5. No manual intervention needed
-
----
-
-## 📈 Scaling on Render
-
-### Database (Currently In-Memory)
-
-For production, replace in-memory database:
-
-**Option 1: Free PostgreSQL on Render**
-1. Create Postgres database on Render
-2. Connect string in environment variables
-3. Update `src/lib/database.ts` to use PostgreSQL
-
-**Option 2: MongoDB Atlas**
-1. Free tier available
-2. Easy to set up
-3. Update database service
-
-### Storage (Currently Local Filesystem)
-
-For production, use cloud storage:
-
-**Option: AWS S3**
-1. Create S3 bucket
-2. Create IAM credentials
-3. Update `src/lib/storage.ts` to use S3
-4. Add access keys to environment variables
-
----
-
-## 🎁 Features Available
-
-✅ AI video analysis (GPT-4o)
-✅ Video upload (2GB max)
-✅ Whisper transcription
-✅ FFmpeg processing
-✅ Async clip generation
-✅ Job progress tracking
-✅ Clip downloads
-✅ Thumbnail generation
-✅ Subtitle generation
-
----
-
-## 📞 Support
-
-### Render Help
-- [Render Docs](https://render.com/docs)
-- [Render Status](https://status.render.com)
-
-### Reel Magic AI
-- Check [API.md](../API.md) for API reference
-- Check [INTEGRATION.md](../INTEGRATION.md) for examples
-- Read [README.md](../README.md) for overview
-
----
-
-## 🚀 Next Steps
-
-1. ✅ Deploy to Render (completed above)
-2. 🧪 Test the health endpoint
-3. 📤 Upload a test video
-4. 🎬 Generate clips
-5. 💾 Download results
-
----
-
-## 📲 Integration Examples
-
-### Frontend (React)
-
-```typescript
-const API_URL = 'https://reel-magic-ai.onrender.com';
-
-async function uploadVideo(file: File) {
-  const formData = new FormData();
-  formData.append('video', file);
-  
-  const response = await fetch(`${API_URL}/api/videos/upload`, {
-    method: 'POST',
-    body: formData,
-  });
-  
-  return response.json();
-}
+```
+Render Dashboard → Your Service → Logs tab
 ```
 
-### Frontend (JavaScript)
+See real-time:
+- Server startup messages
+- Upload activity
+- Processing progress
+- Error messages
 
-```javascript
-const API_URL = 'https://reel-magic-ai.onrender.com';
-
-document.getElementById('upload').addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  const formData = new FormData();
-  formData.append('video', file);
-  
-  const res = await fetch(`${API_URL}/api/videos/upload`, {
-    method: 'POST',
-    body: formData,
-  });
-  const data = await res.json();
-  console.log('Video ID:', data.data.videoId);
-});
+### Monitor Performance
+```
+Render Dashboard → Your Service → Metrics tab
 ```
 
----
+Track:
+- CPU usage
+- Memory usage
+- Request count
+- Error rate
 
-## 🎯 Render Deployment Checklist
+### Get Notifications
+```
+Render Dashboard → Account Settings → Notifications
+```
 
-- [ ] Render account created
-- [ ] Repository connected
-- [ ] Build command set (with FFmpeg)
-- [ ] Start command set
-- [ ] Environment variables added:
-  - [ ] OPENAI_API_KEY
-  - [ ] NODE_ENV=production
-  - [ ] PORT=10000
-- [ ] Service created
-- [ ] Deployment started
-- [ ] Health check passing
-- [ ] Video upload tested
-- [ ] Clip generation tested
+Enable:
+- Build failures
+- Service crashes
+- Disk full warnings
 
 ---
 
-## 🔐 Security Notes
+## Keeping Code Updated
 
-1. **Never commit `.env` file** (already in .gitignore ✓)
-2. **API keys in Render dashboard** (environment variables)
-3. **HTTPS enabled** (Render automatic)
-4. **CORS enabled** (Express configured)
-5. **Input validation** (All endpoints validate)
+After changes to your GitHub repo:
+
+### Auto-Deploy (Recommended)
+Render automatically redeploys when you push to main:
+
+```bash
+git add .
+git commit -m "Update feature"
+git push origin main
+# Render automatically rebuilds and deploys! 🚀
+```
+
+### Manual Redeploy
+In Render dashboard:
+1. Click **"Manual Deploy"** button
+2. Select branch
+3. Click **"Deploy"**
 
 ---
 
-**✅ Your Reel Magic AI is now live on Render!**
+## Production Best Practices
 
-Share your URL with others to start processing videos.
+### 🔒 Secure Your API Key
+
+**Never:**
+```bash
+git add .env          # ❌ Don't commit API keys!
+export API_KEY=value  # ❌ Don't hardcode in files!
+```
+
+**Always:**
+1. Use Render's Environment Variables
+2. Rotate keys regularly
+3. Use separate keys for dev/prod
+
+### 📊 Monitor Costs
+
+**Free Tier Limits:**
+- Up to 750 hours/month of free hours
+- Shared instance (low power)
+- Spins down after 15 min of inactivity
+
+**For Production:**
+- Upgrade to **Standard** plan ($7/month)
+- 24/7 uptime
+- Dedicated instance
+- Better performance
+
+### ⚡ Optimize Performance
+
+1. **Reduce API calls:** Cache transcripts
+2. **Parallel processing:** Already implemented ✅
+3. **Optimize video size:** Recommend max 500MB uploads
+4. **Use CDN:** For clip downloads (future upgrade)
 
 ---
 
-Last Updated: April 16, 2026
+## Troubleshooting Checklist
+
+- [ ] GitHub repo is public/accessible
+- [ ] API key is test/valid (not expired)
+- [ ] Build command includes FFmpeg install
+- [ ] Environment variables are set in Render (not in code)
+- [ ] Health check passes (`/health` endpoint)
+- [ ] Server starts without errors (check Logs)
+- [ ] Can upload a test video
+- [ ] Can request clip generation
+
+---
+
+## Next Steps
+
+### After Deployment
+
+1. **Test thoroughly** - Try uploading a video
+2. **Monitor logs** - Watch for errors
+3. **Set up alerting** - Get notified of issues
+4. **Consider upgrade** - If using more than free tier
+5. **Add authentication** - Protect your API (future)
+6. **Add database** - Store data persistently (future)
+
+### Deploy a Frontend
+
+Connect a frontend to your API:
+- React/Next.js app
+- Vue/Nuxt app
+- Svelte app
+- Static HTML/JS
+
+Your API is ready to accept requests from anywhere!
+
+---
+
+## Useful Resources
+
+- 📖 [Render Docs](https://render.com/docs)
+- 🔑 [OpenAI API Keys](https://platform.openai.com/api-keys)
+- 📹 [FFmpeg Documentation](https://ffmpeg.org/)
+- 📝 [Your API Documentation](./API.md)
+- 🧪 [Integration Guide](./INTEGRATION.md)
+
+---
+
+## Success! 🎉
+
+Your Reel Magic AI backend is now:
+
+✅ **Deployed** on Render (public URL)
+✅ **Running** with FFmpeg support
+✅ **Connected** to OpenAI API
+✅ **Accepting** video uploads
+✅ **Processing** with AI
+✅ **Generating** viral clips
+
+Share your public URL and start using it immediately!
+
+---
+
+**Questions?** Check logs, read the docs, or file an issue on GitHub.
+
+**Ready for production?** Upgrade to Standard plan and add monitoring.

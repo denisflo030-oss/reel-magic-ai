@@ -1,0 +1,17 @@
+tree ef6b7166aea994ed19a9df832c4ec53146a3cd10
+parent 25c1490f886965cb3d5555d34e41c2df45a8038b
+author denisflo030-oss <denisflo030@gmail.com> 1776298859 +0000
+committer denisflo030-oss <denisflo030@gmail.com> 1776298859 +0000
+
+feat: complete AI video processing backend
+
+- Full TypeScript implementation (1763 lines)
+- Video upload with FFmpeg metadata extraction
+- GPT-4o AI analysis for viral moments
+- Whisper transcription + subtitle generation
+- FFmpeg parallel clip processing
+- Complete REST API (10 endpoints)
+- Async job status tracking
+- Render-ready deployment
+- Comprehensive documentation (2356 lines)
+- Integration examples & test scripts
