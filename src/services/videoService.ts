@@ -100,7 +100,6 @@ export async function downloadVideoFromUrl(url: string): Promise<VideoFile> {
     throw error;
   }
 }
-}
 
 /**
  * Delete video

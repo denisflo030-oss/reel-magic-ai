@@ -83,6 +83,33 @@ export async function getVideoInfo(req: Request, res: Response): Promise<void> {
 }
 
 /**
+ * Delete a video file
+ */
+export async function deleteVideo(req: Request, res: Response): Promise<void> {
+  try {
+    const { videoId } = req.params;
+    const deleted = videoService.deleteVideoById(videoId);
+
+    if (!deleted) {
+      res.status(404).json({ error: 'Video not found' });
+      return;
+    }
+
+    res.json({
+      success: true,
+      message: 'Video deleted successfully',
+      videoId,
+    });
+  } catch (error) {
+    console.error('Delete video error:', error);
+    res.status(500).json({
+      error: 'Failed to delete video',
+      message: (error as Error).message,
+    });
+  }
+}
+
+/**
  * Analyze video from URL
  */
 export async function analyzeVideoUrl(req: Request, res: Response): Promise<void> {

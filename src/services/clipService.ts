@@ -217,6 +217,13 @@ export function getAllClips(): GeneratedClip[] {
 }
 
 /**
+ * Get job status
+ */
+export function getJobStatus(jobId: string): ProcessingJob | undefined {
+  return db.getJob(jobId);
+}
+
+/**
  * Delete clip
  */
 export function deleteClipById(clipId: string): boolean {
