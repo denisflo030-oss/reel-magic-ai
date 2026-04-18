@@ -3,7 +3,7 @@ services:
     name: reel-magic-ai
     env: node
     plan: standard
-    buildCommand: apt-get update && apt-get install -y ffmpeg && npm install && npm run build
+    buildCommand: apt-get update && apt-get install -y ffmpeg yt-dlp && npm install && npm run build
     startCommand: npm start
     healthCheckPath: /health
     healthCheckInterval: 30

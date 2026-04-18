@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { exec } from 'child_process';
+import { promises as fs } from 'fs';
 import { videoService, clipService } from '../services/index.js';
 
 /**
@@ -151,5 +153,64 @@ export async function analyzeVideoUrl(req: Request, res: Response): Promise<void
       error: 'Failed to analyze video from URL',
       message: (error as Error).message,
     });
+  }
+}
+
+/**
+ * Process YouTube video
+ */
+export async function processYouTubeVideo(req: Request, res: Response): Promise<void> {
+  try {
+    const { url } = req.body;
+
+    if (!url) {
+      res.status(400).json({ error: 'URL is required' });
+      return;
+    }
+
+    // Get video ID first
+    const videoId = await new Promise<string>((resolve, reject) => {
+      exec(`yt-dlp --print "%(id)s" "${url}"`, { timeout: 30000 }, (error, stdout, stderr) => {
+        if (error) {
+          reject(new Error(`Failed to get video ID: ${error.message}`));
+        } else {
+          resolve(stdout.trim());
+        }
+      });
+    });
+
+    const outputPath = `/tmp/${videoId}.mp4`;
+
+    // Download video
+    await new Promise<void>((resolve, reject) => {
+      exec(`yt-dlp -f "best[ext=mp4]" -o "${outputPath}" "${url}"`, { timeout: 300000 }, (error, stdout, stderr) => {
+        if (error) {
+          reject(new Error(`Download failed: ${error.message}`));
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    // Get file size
+    const stats = await fs.stat(outputPath);
+    const fileSize = stats.size;
+
+    // Process like uploaded video
+    const video = await videoService.processUploadedVideo(outputPath, `${videoId}.mp4`, fileSize);
+
+    // Generate clips
+    const clips = await clipService.generateClipsSync(video.id);
+
+    res.status(201).json({
+      clips: clips.map(c => ({
+        id: c.id,
+        title: c.title,
+        download_url: `/api/clips/download/${c.id}`,
+      })),
+    });
+  } catch (error) {
+    console.error('YouTube processing error:', error);
+    res.status(500).json({ error: 'YouTube download failed' });
   }
 }

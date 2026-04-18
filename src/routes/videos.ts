@@ -1,6 +1,6 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import multer from 'multer';
-import { uploadVideo, getVideoInfo, deleteVideo, analyzeVideoUrl } from '../controllers/videoController.js';
+import { uploadVideo, getVideoInfo, deleteVideo, analyzeVideoUrl, processYouTubeVideo } from '../controllers/videoController.js';
 
 const router = Router();
 
@@ -33,6 +33,7 @@ const upload = multer({
 // Routes
 router.post('/upload', upload.single('video'), uploadVideo);
 router.post('/analyze', analyzeVideoUrl);
+router.post('/youtube', processYouTubeVideo);
 router.get('/:videoId', getVideoInfo);
 router.delete('/:videoId', deleteVideo);
 
